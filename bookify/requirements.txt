@@ -1,0 +1,6 @@
+textblob==0.15.3
+gTTS==2.2.1
+goslate==1.5.1
+pdfplumber==0.5.25
+nltk==3.5
+Django==3.0.6
