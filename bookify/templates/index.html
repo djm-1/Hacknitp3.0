@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- aos -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>Bookify</title>
+    <style>
+        .navbar-brand{
+            font-family: 'Fredoka One', cursive;
+            font-size: 35px;
+        }
+        .navbar-light{
+            background-color: rgba(37, 240, 189, 0.897) !important;
+        }
+        .upper-box{
+            margin: 5%;
+            /*border-radius: 15px;
+            -webkit-box-shadow: 0 0 18px lightgray;
+            box-shadow: 0 0 18px lightgray;*/
+        }
+        .cont{
+            padding: 3%;
+        }
+        .heading{
+            font-family: 'Fredoka One', cursive;
+        }
+        .text-content{
+            font-size: 24px;
+        }
+        .filname{
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border: 1px solid lightgray;
+            background-color: aliceblue;
+        }
+        .btn-info{
+            background-color: #25f0bd !important;
+        }
+        .footer{
+            text-align: center;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            background-color: #25f0bd;
+            position: static;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- navabr begin -->
+    <!-- Image and text -->
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'bookify.svg' %}" alt="" width="40" height="40">
+            Bookify
+        </a>
+        </div>
+    </nav>
+    <!-- navbar end -->
+    <div class="upper-box row">
+        <div class="col-md-6 cont">
+            <img src="{% static 'reading.svg' %}" alt="" width="100%">
+        </div>
+        <div class="col-md-6 cont">
+            <h1 class="heading" style="font-size: 50px;" data-aos="fade-left" data-aos-duration="3000">Why Bookify?</h1>
+            <p class="text-content" data-aos="zoom-in" data-aos-duration="3000">You may have used Spotify to listen to songs. But, what about books or lengthy PDFs? Well, you might say that audiobooks serve that purpose. 
+                But, using this web application, users can upload PDF document and get the summary of that PDF file in the language of their choice as audio output (mp3).  Hence, listening to the summaries of these PDF documents in your native language can save your time and effort. 
+            </p>
+        </div>
+    </div>
+    <div class="upper-box row">
+        <div class="col-md-6 cont">
+            <h1 class="heading" style="font-size: 50px;" data-aos="fade-right" data-aos-duration="3000">Let's try it !</h1>
+            <div class="mt-3">
+                <form action="" method="POST" enctype="multipart/form-data" onsubmit="LoadingFunc()">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <label class="btn btn-info">
+                            <input type="file" name="myfile" class="d-none" onchange="$('#upload-file-name').html(this.files[0].name)" required>
+                            Upload PDF file 
+                        </label>
+                        <span class="filname" id="upload-file-name">No File Uploaded</span>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1" class="mb-2">Select Language :</label>
+                        <select class="form-control" name="lang" id="exampleFormControlSelect1" required>
+                            <option value="en">English</option>
+                            <option value="hi">Hindi</option>
+                            <option value="bn">Bengali</option>
+                        </select>
+                    </div>
+                    <!-- <span id="upload-file-name"></span> -->
+                    <button type="submit" id='sub-btn' class="btn btn-info mt-4">Bookify it!</button>
+                </form>
+                
+                <script>
+                    function LoadingFunc(){
+                        $('#sub-btn').html(
+                            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating audio summary...'
+                        )
+                    }
+                </script>
+                <div>
+                    {% if model %}
+                        <div class="mt-4">
+                            <div>
+                                <audio controls name="media" autoplay>
+                                    <source src="media/{{model.output_file}}" type="audio/mpeg">
+                                </audio>
+                            </div>
+                            <div class="mt-3">
+                                <a class="btn btn-info ml-4" href="media/{{model.output_file}}" download><i class="fa fa-download"></i> Download</a>    
+                            </div>
+                        </div>    
+                    {% endif %}
+                </div>
+            
+            </div>
+        </div>
+        <div class="col-md-6 cont" data-aos="fade-down" data-aos-duration="3000">
+            <img src="{% static 'music.svg' %}" alt="" width="100%">
+        </div>
+    </div>
+    <div class="footer">
+        <p><strong>Made with ❤ by Dibyajyoti Mondal || HackNITP 3.0</strong></p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>
